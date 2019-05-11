@@ -21,9 +21,16 @@ public class TwoSum {
     public static void main(String[] args) {
         int[] nums = new int[]{3, 3};
         int target = 6;
-        System.out.println("twoSum result = [ " + JSONObject.toJSONString(twoSum(nums, target)) + " ]");
+        System.out.println("twoSum result =  " + JSONObject.toJSONString(twoSum(nums, target)) + " ");
     }
 
+    /**
+     * @param nums
+     * @param target
+     * @return
+     * @result 执行用时 : 8 ms, 在Two Sum的Java提交中击败了86.58% 的用户
+     * 内存消耗 : 37.8 MB, 在Two Sum的Java提交中击败了83.09% 的用户
+     */
     public static int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<Integer, Integer>();
         int j;

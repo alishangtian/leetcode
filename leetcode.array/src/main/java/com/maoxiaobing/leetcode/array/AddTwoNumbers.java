@@ -1,7 +1,5 @@
 package com.maoxiaobing.leetcode.array;
 
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
  * <p>
@@ -17,47 +15,61 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class AddTwoNumbers {
     public static void main(String[] args) {
-        ListNode l11 = new ListNode(8);
-        ListNode l12 = new ListNode(2);
+        ListNode l11 = new ListNode(1);
+        ListNode l12 = new ListNode(9);
         l11.next = l12;
-        ListNode l13 = new ListNode(1);
+        ListNode l13 = new ListNode(9);
         l12.next = l13;
-        ListNode l21 = new ListNode(7);
-        ListNode l22 = new ListNode(6);
-        l21.next = l22;
-        ListNode l23 = new ListNode(5);
-        l22.next = l23;
-
-        System.out.println("args = [" + addTwoNumbers(l11, l21).toString() + "]");
+        ListNode l21 = new ListNode(8);
+        System.out.println("args = [" + addTwoNumbers2(l11, l21).toString() + "]");
     }
 
-    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        int i = 0;
-        int sb = 10;
-        int result = 0;
+    /**
+     * 考虑进位下的链表循环
+     *
+     * @param l1
+     * @param l2
+     * @return
+     * @result 执行用时 : 11 ms, 在Add Two Numbers的Java提交中击败了75.22% 的用户
+     * 内存消耗 : 41.9 MB, 在Add Two Numbers的Java提交中击败了93.28% 的用户
+     */
+    public static ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        int forward = 0;
+        ListNode head = null, current = null;
         do {
-            result += Math.pow(sb, i) * (l1.val + l2.val);
-            i++;
+            int result = 0;
+            result += l1.val + l2.val;
             l1 = l1.next;
             l2 = l2.next;
+            result += forward;
+            forward = result > 9 ? 1 : 0;
+            if (null == head) {
+                head = new ListNode(result % 10);
+                current = head;
+                continue;
+            }
+            current.next = new ListNode(result % 10);
+            current = current.next;
         } while (l1 != null && l2 != null);
-        do {
-            if (l1 != null) {
-                result += Math.pow(sb, i) * l1.val;
-                l1 = l1.next;
-                i++;
-            }
-        } while (l1 != null);
-        do {
-            if (l2 != null) {
-                result += Math.pow(sb, i) * l2.val;
-                l2 = l2.next;
-                i++;
-            }
-        } while (l2 != null);
-        for (int j = 0; j < i; j++) {
-
+        while (l1 != null) {
+            int result = 0;
+            result += l1.val + forward;
+            forward = result > 9 ? 1 : 0;
+            current.next = new ListNode(result % 10);
+            current = current.next;
+            l1 = l1.next;
         }
-        return new ListNode(result);
+        while (l2 != null) {
+            int result = 0;
+            result += l2.val + forward;
+            forward = result > 9 ? 1 : 0;
+            current.next = new ListNode(result % 10);
+            current = current.next;
+            l2 = l2.next;
+        }
+        if (forward == 1) {
+            current.next = new ListNode(1);
+        }
+        return head;
     }
 }
